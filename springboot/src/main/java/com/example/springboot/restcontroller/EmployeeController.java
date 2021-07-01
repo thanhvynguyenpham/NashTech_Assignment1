@@ -1,6 +1,7 @@
 package com.example.springboot.restcontroller;
 
 import java.util.List;
+import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -26,9 +27,9 @@ public class EmployeeController {
 	}
 	
 	@GetMapping("/{employeeId}")
-	public Employee findEmployee(@PathVariable Long employeeId) {
-		Employee employee = employeeService.findEmployee(employeeId);
-		if (employee == null) {
+	public Optional<Employee> findEmployee(@PathVariable Long employeeId) {
+		Optional<Employee> employee = employeeService.findEmployee(employeeId);
+		if (employee.isEmpty()) {
 			throw new EmployeeException(employeeId);
 		}
 		return employee;
