@@ -7,6 +7,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.example.springboot.entity.Employee;
+import com.example.springboot.exception.EmployeeExistedException;
 import com.example.springboot.repository.EmployeeRepository;
 import com.example.springboot.service.EmployeeService;
 
@@ -26,5 +27,15 @@ public class EmployeeServiceImpl implements EmployeeService{
 	
 	public Optional<Employee> findEmployee(Long id) {
 		return employeeRepository.findById(id);
+	}
+
+	public void createNewEmployee(Employee employee) {
+		Optional<Employee> emOptional = employeeRepository.findByEmail(employee.getEmail());
+		if (emOptional.isPresent()) {
+			throw new EmployeeExistedException(employee.getEmail());
+		}
+		
+		employeeRepository.save(employee);
+		System.out.println("Employee saved: " + employee);
 	};
 }

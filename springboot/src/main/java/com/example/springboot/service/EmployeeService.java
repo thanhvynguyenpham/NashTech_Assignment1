@@ -11,4 +11,5 @@ import com.example.springboot.entity.Employee;
 public interface EmployeeService {
 	public List<Employee> getEmployees();
 	public Optional<Employee> findEmployee(Long id);
+	public void createNewEmployee(Employee employee);
 }
