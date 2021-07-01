@@ -13,4 +13,5 @@ public interface EmployeeService {
 	public Optional<Employee> findEmployee(Long id);
 	public void createNewEmployee(Employee employee);
 	public void deleteEmployee(Long employeeId);
+	public void updateEmployee(Long employeeId, String name, String email, String role);
 }
