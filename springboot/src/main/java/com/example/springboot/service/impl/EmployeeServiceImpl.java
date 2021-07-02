@@ -72,12 +72,12 @@ public class EmployeeServiceImpl implements EmployeeService{
 		}
 	};
 	
-	boolean validateString(String updateStr, String oldStr) {
+	public boolean validateString(String updateStr, String oldStr) {
 		return updateStr != null
 				&& updateStr.length() > 0
 				&& !Objects.equals(updateStr, oldStr);
 	}
-	boolean validateEmail(String updateEmail, String oldEmail) {
+	public boolean validateEmail(String updateEmail, String oldEmail) {
 		return validateString(updateEmail, oldEmail)
 				&& updateEmail.contains("@");
 	}
