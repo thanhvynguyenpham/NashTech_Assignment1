@@ -12,9 +12,11 @@ import com.example.springboot.entity.Employee;
 public interface EmployeeService {
 	public List<Employee> getEmployees();
 	public Optional<Employee> findEmployee(Long id);
+	public Optional<Employee> findEmployeeByEmail(String employeeEmail);
 	public void createNewEmployee(Employee employee);
 	public void deleteEmployee(Long employeeId);
 	public void updateEmployee(Long employeeId, String name, String email, String role);
 	public boolean validateString(String updateStr, String oldStr);
 	public boolean validateEmail(String updateEmail, String oldEmail);
+	public boolean validateEmailFormat(String email);
 }

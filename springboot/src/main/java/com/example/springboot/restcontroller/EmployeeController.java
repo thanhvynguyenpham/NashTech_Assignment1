@@ -40,6 +40,15 @@ public class EmployeeController {
 		return employee;
 	}
 	
+	@GetMapping("/email/{employeeEmail}")
+	public Optional<Employee> findEmployee(@PathVariable String employeeEmail){
+		Optional<Employee> employee = employeeService.findEmployeeByEmail(employeeEmail);
+		if (employee.isEmpty()) {
+			throw new EmployeeException(employeeEmail);
+		}
+		return employee;
+	}
+	
 	@PostMapping
 	public void createNewEmployee(@RequestBody Employee employee) {
 		employeeService.createNewEmployee(employee);

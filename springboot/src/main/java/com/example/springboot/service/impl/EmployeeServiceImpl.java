@@ -11,6 +11,7 @@ import org.springframework.transaction.annotation.Transactional;
 import com.example.springboot.entity.Employee;
 import com.example.springboot.exception.EmployeeException;
 import com.example.springboot.exception.EmployeeExistedException;
+import com.example.springboot.exception.WrongEmailFormatException;
 import com.example.springboot.repository.EmployeeRepository;
 import com.example.springboot.service.EmployeeService;
 
@@ -24,6 +25,8 @@ public class EmployeeServiceImpl implements EmployeeService{
 		this.employeeRepository = employeeRepository;
 	}
 	
+	//READ
+	
 	public List<Employee> getEmployees(){
 		return employeeRepository.findAll();
 	}
@@ -31,9 +34,18 @@ public class EmployeeServiceImpl implements EmployeeService{
 	public Optional<Employee> findEmployee(Long id) {
 		return employeeRepository.findById(id);
 	}
+	
+	public Optional<Employee> findEmployeeByEmail(String employeeEmail) {
+		return employeeRepository.findByEmail(employeeEmail);
+	}
+	
+	//CREATE
 
 	public void createNewEmployee(Employee employee) {
 		Optional<Employee> emOptional = employeeRepository.findByEmail(employee.getEmail());
+		if (!validateEmailFormat(employee.getEmail())) {
+			throw new WrongEmailFormatException(employee.getEmail());
+		}
 		if (emOptional.isPresent()) {
 			throw new EmployeeExistedException(employee.getEmail());
 		}
@@ -42,6 +54,7 @@ public class EmployeeServiceImpl implements EmployeeService{
 		System.out.println("Employee saved: " + employee);
 	}
 
+	//DELETE
 	
 	public void deleteEmployee(Long employeeId) {
 		Optional<Employee> emOptional = employeeRepository.findById(employeeId);
@@ -53,6 +66,8 @@ public class EmployeeServiceImpl implements EmployeeService{
 		System.out.println("Employee with id = " + employeeId + " deleted");
 	}
 
+	//UPDATE
+	
 	@Transactional
 	public void updateEmployee(Long employeeId, String name, String email, String role) {
 		Employee employee = employeeRepository
@@ -70,7 +85,7 @@ public class EmployeeServiceImpl implements EmployeeService{
 			}
 			employee.setEmail(email);
 		}
-	};
+	}; 
 	
 	public boolean validateString(String updateStr, String oldStr) {
 		return updateStr != null
@@ -78,8 +93,14 @@ public class EmployeeServiceImpl implements EmployeeService{
 				&& !Objects.equals(updateStr, oldStr);
 	}
 	public boolean validateEmail(String updateEmail, String oldEmail) {
-		return validateString(updateEmail, oldEmail)
-				&& updateEmail.contains("@");
+		if (!validateEmailFormat(updateEmail)) {
+			throw new WrongEmailFormatException(updateEmail);
+		}
+		return validateString(updateEmail, oldEmail);
+	}
+	
+	public boolean validateEmailFormat(String email) {
+		return email.length()>0 && email.contains("@");
 	}
 	
 }
