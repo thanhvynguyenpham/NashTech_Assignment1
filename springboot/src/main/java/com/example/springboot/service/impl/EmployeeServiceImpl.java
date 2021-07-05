@@ -79,7 +79,7 @@ public class EmployeeServiceImpl implements EmployeeService{
 		if (validateString(role, employee.getRole())) {
 			employee.setRole(role);
 		}
-		if (validateEmail(email, employee.getEmail())) {
+		if (email != null && email.length()>0 && validateEmail(email, employee.getEmail())) {
 			if(employeeRepository.findByEmail(email).isPresent()) {
 				throw new EmployeeExistedException(email);
 			}
@@ -100,7 +100,7 @@ public class EmployeeServiceImpl implements EmployeeService{
 	}
 	
 	public boolean validateEmailFormat(String email) {
-		return email.length()>0 && email.contains("@");
+		return email.contains("@");
 	}
 	
 }
